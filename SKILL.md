@@ -28,7 +28,7 @@ python3 scripts/check_dependencies.py
 2. 若无可用安装器，则给出手动安装地址：
    - grok-search skill: `https://github.com/Frankieli123/grok-skill`
    - grok-search MCP: `https://github.com/GuDaStudio/GrokSearch`
-   - github-helper: 当前用户 GitHub 仓库中的 `github-helper` skill 仓库
+   - github-helper: `https://github.com/dandandujie/github-helper`
 3. 明确标记“依赖未满足，重写任务暂停”。
 
 ## Workflow
