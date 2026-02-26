@@ -6,7 +6,7 @@
 
 ## 2. 推荐协作方式
 
-1. 用 `github-kb` skill 管理本地仓库、问题单、PR 语义上下文。
+1. 用 `github-helper` skill 管理本地仓库、问题单、PR 语义上下文。
 2. 用本技能的 `scripts/upstream_sync_report.py` 计算 upstream 与 origin 的 commit 差异。
 3. 将新增变更标注为三类任务：
    - 行为一致性修复；

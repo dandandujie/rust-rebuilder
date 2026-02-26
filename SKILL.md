@@ -1,13 +1,35 @@
 ---
-name: rewrite-project-in-rust
-description: Plan and execute incremental project rewrites to Rust with architecture mapping, parity verification, idiomatic Rust guidance, and GitHub upstream synchronization. Use when users ask to port or rewrite existing systems into Rust, need latest Rust feature checks, want migration pitfall prevention, or need continuous sync with source repository commits and pull requests.
+name: rust-rebuilder
+description: Plan and execute incremental project rewrites to Rust with architecture mapping, parity verification, idiomatic Rust guidance, dependency preflight checks, and GitHub upstream synchronization. Use when users ask to port or rewrite existing systems into Rust, need latest Rust feature checks, want migration pitfall prevention, or need continuous sync with source repository commits and pull requests.
 ---
 
-# Rewrite Project In Rust
+# Rust Rebuilder
 
 ## Overview
 
 使用“分阶段、可验证、可回滚”的方式重写项目到 Rust。优先确保行为等价和可观测性，再做性能与架构优化。
+
+## Dependency Preflight (Mandatory)
+
+每次执行前先运行：
+
+```bash
+python3 scripts/check_dependencies.py
+```
+
+自动检测以下依赖是否可用：
+
+- `grok-search` skill，或 `grok-search` MCP。
+- `github-helper` skill。
+
+若任一缺失，必须输出安装引导并暂停当前重写任务。安装引导顺序：
+
+1. 优先使用 `$skill-installer` 安装缺失 skill。
+2. 若无可用安装器，则给出手动安装地址：
+   - grok-search skill: `https://github.com/Frankieli123/grok-skill`
+   - grok-search MCP: `https://github.com/GuDaStudio/GrokSearch`
+   - github-helper: 当前用户 GitHub 仓库中的 `github-helper` skill 仓库
+3. 明确标记“依赖未满足，重写任务暂停”。
 
 ## Workflow
 
@@ -57,14 +79,14 @@ description: Plan and execute incremental project rewrites to Rust with architec
 
 若源项目来自 GitHub，执行时读取 `references/github-upstream-sync.md` 并优先：
 
-1. 用 `github-kb` skill 管理本地克隆与仓库知识快照。
+1. 用 `github-helper` skill 管理本地克隆与仓库知识快照。
 2. 用 `scripts/upstream_sync_report.py` 生成 upstream 差异报告。
 3. 将新增 commits/PR 分类映射为 Rust 重写 backlog（行为修复、接口变更、性能变更）。
 
 ## Skill Collaboration
 
 - 获取 Rust 最新特性与生态信息：优先使用 `grok-search`（或 grok-search MCP）。
-- GitHub 仓库同步与变更追踪：优先联动 `github-kb`。
+- GitHub 仓库同步与变更追踪：优先联动 `github-helper`。
 - 若用户要求自动生成完整迁移执行文档，可联动 `docx`/`xlsx` 生成结构化交付物。
 
 ## Resource Map
@@ -72,10 +94,11 @@ description: Plan and execute incremental project rewrites to Rust with architec
 - `references/rust-language-update-playbook.md`：Rust 版本与特性确认流程、查询模板。
 - `references/rewrite-pitfalls-and-antipatterns.md`：重写误区与排雷清单。
 - `references/github-upstream-sync.md`：上游仓库同步、commit/PR 映射流程。
+- `scripts/check_dependencies.py`：检测并引导安装必需 skill/MCP。
 - `scripts/upstream_sync_report.py`：本地仓库 upstream 差异报告工具。
 
 ## Quick Start Prompt Pattern
 
 使用以下模板触发技能：
 
-`使用 $rewrite-project-in-rust，把 <源项目/模块> 分三批重写到 Rust；每批给出等价验证方案、风险点和与 upstream 同步策略。`
+`使用 $rust-rebuilder，把 <源项目/模块> 分三批重写到 Rust；每批给出等价验证方案、风险点和与 upstream 同步策略。`
