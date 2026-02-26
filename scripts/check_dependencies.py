@@ -9,6 +9,7 @@ CODEX_CONFIG_FILE = Path.home() / ".codex" / "config.toml"
 
 GROK_SKILL_REPO = "https://github.com/Frankieli123/grok-skill"
 GROK_MCP_REPO = "https://github.com/GuDaStudio/GrokSearch"
+GITHUB_HELPER_REPO = "https://github.com/dandandujie/github-helper"
 
 
 def is_skill_installed(skill_name: str) -> bool:
@@ -39,7 +40,10 @@ def build_report() -> dict[str, object]:
             f"{GROK_SKILL_REPO}；mcp 仓库: {GROK_MCP_REPO}"
         )
     if not has_helper_skill:
-        report["install_guide"].append("缺少 github-helper skill，请先安装后再执行重写。")
+        report["install_guide"].append(
+            "缺少 github-helper skill，请先安装后再执行重写。仓库地址: "
+            f"{GITHUB_HELPER_REPO}"
+        )
     report["ready"] = len(report["install_guide"]) == 0
     return report
 

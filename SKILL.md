@@ -28,7 +28,7 @@ python3 scripts/check_dependencies.py
 2. 若无可用安装器，则给出手动安装地址：
    - grok-search skill: `https://github.com/Frankieli123/grok-skill`
    - grok-search MCP: `https://github.com/GuDaStudio/GrokSearch`
-   - github-helper: `https://github.com/dandandujie/github-helper`
+   - github-helper: 当前用户 GitHub 仓库中的 `github-helper` skill 仓库
 3. 明确标记“依赖未满足，重写任务暂停”。
 
 ## Workflow
@@ -36,9 +36,19 @@ python3 scripts/check_dependencies.py
 1. 定义范围：确认系统边界、关键路径、性能目标、上线约束。
 2. 建立映射：将源项目的模块/接口/数据模型映射到 Rust crate 与模块结构。
 3. 制定切片：按垂直功能切分迁移批次，每批必须可编译、可测试、可回归。
-4. 执行重写：先保行为一致，再替换为更地道的 Rust 设计。
+4. 执行重写：先保行为一致，再替换为更地道的 Rust 设计；若是后端代码，强制套用 `references/rust-backend-guidelines.md`。
 5. 校验对齐：运行编译、测试、基准、回归对比，阻断行为漂移。
 6. 跟踪上游：若源项目在 GitHub，持续同步 upstream 变更并更新重写 backlog。
+
+## Backend Rust Guardrails
+
+当目标是后端 Rust 代码（例如 API、作业系统、数据库访问、异步任务）时，必须先读取 `references/rust-backend-guidelines.md`，并在输出中显式说明以下检查点：
+
+- 数据结构是否用 `enum`/newtype 表达状态和不变量；
+- SQLx 查询是否显式列名且无 `SELECT *`；
+- async 代码是否避免阻塞 runtime；
+- 错误处理是否统一 `Result` 语义且无库级 `panic`；
+- 可见性是否 `pub(crate)` 优先，模块边界是否收敛。
 
 ## Mandatory Output Contract
 
@@ -92,6 +102,7 @@ python3 scripts/check_dependencies.py
 ## Resource Map
 
 - `references/rust-language-update-playbook.md`：Rust 版本与特性确认流程、查询模板。
+- `references/rust-backend-guidelines.md`：后端 Rust 编码规范与审查清单。
 - `references/rewrite-pitfalls-and-antipatterns.md`：重写误区与排雷清单。
 - `references/github-upstream-sync.md`：上游仓库同步、commit/PR 映射流程。
 - `scripts/check_dependencies.py`：检测并引导安装必需 skill/MCP。
