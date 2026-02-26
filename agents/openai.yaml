@@ -1,0 +1,4 @@
+interface:
+  display_name: "Rewrite to Rust"
+  short_description: "Incremental Rust rewrite with upstream sync guardrails."
+  default_prompt: "Use $rewrite-project-in-rust to rewrite this project to Rust with staged parity checks and upstream synchronization."
